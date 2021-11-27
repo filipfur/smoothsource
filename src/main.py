@@ -1,12 +1,25 @@
 from smoothsource import smoothsource
 
 def main():
-    model = smoothsource.loadModel("C:\\Users\\Filip Fur\\Desktop\\xtuml_plugin\\xtuml")
+    smoothsrc = smoothsource()
 
-    for uid in model.classes():
-        print(uid)
+    model = smoothsrc.loadModel("test/xtuml")
 
-    smoothsource.parseTemplate("template\\Class.javat")
+    mockParams = {
+            "packageName": "Package",
+            "className": "Foo",
+            "attributes": [
+                {"attributeType": "Integer", "attributeName": "x"},
+                {"attributeType": "Integer", "attributeName": "y"}
+            ]
+        }
+    #smoothsrc.populateTemplate(smoothsource.template.Java.ClassTemplate, mockParams)
+
+    classTemplate = smoothsrc.createTemplate(smoothsource.template.Java.xtUMLClassTemplate)
+
+    modelcompiler = smoothsrc.createModelCompiler(model, classTemplate, "test/xtuml/gen")
+
+    modelcompiler.compileAll(persist=True)
 
 
 if __name__ == "__main__":

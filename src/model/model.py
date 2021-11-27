@@ -11,6 +11,8 @@ class Model:
         return self._classes[uid]
 
     def addRelation(self, relation):
+        lClass = relation.leftAssociation()._class().relate(relation)
+        rClass = relation.rightAssociation()._class().relate(relation)
         self._relations[relation.uid()] = relation
 
     def relationByUid(self, uid):

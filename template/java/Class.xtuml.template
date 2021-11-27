@@ -1,0 +1,90 @@
+package {{packageName}};
+
+class _{{className}}
+{
+    [[attributes@// Attributes|
+    private {{attributeType}} _{{attributeName}};]]
+    [[singleRelations@// Relations|
+    private {{relatedClassName}} _relationR{{relationId}};]]
+    [[multiRelations|
+    private final ArrayList<{{relatedClassName}}> _relationR{{relationId}};]]
+    
+    public _{{className}}()
+    {[[singleRelations|
+        this._relationR{{relationId}} = null;
+        ]][[multiRelations|
+        this._relationsR{{relationId}} = new ArrayList<{{relatedClassName}}>();]]
+    }
+
+    [[attributes@// Getters|
+    public {{attributeType}} get{{attributeName:upperCC}}()
+    {
+        return _{{attributeName}};
+    }
+    ]]
+    [[attributes@// Setters|
+    public void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
+    {
+        this._{{attributeName}} = {{attributeName}};
+    }
+    ]][[singleRelations|
+    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    {
+        if(this._relationR{{relationId}} != {{relatedClassName:lowerCC}})
+        {
+            this._relationR{{relationId}} = {{relatedClassName:lowerCC}};
+            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}(({{className}}) this);
+        }
+    }]][[multiRelations|
+    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    {
+        if(!this._relationsR{{relationId}}.contains(car))
+        {
+            this._relationsR{{relationId}}.add(car);
+            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}({{className}} this);
+        }
+    }
+
+    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    {
+        if(this._relationsR{{relationId}}.remove({{relatedClassName:lowerCC}}))
+        {
+            {{relatedClassName:lowerCC}}.unrelateAcrossR{{relationId}}();
+        }
+    }
+    ]][[singleRelations|
+    public boolean isRelatedAcrossR{{relationId}}()
+    {
+        return this._relationR{{relationId}} != null;
+    }
+
+    public {{relatedClassName}} selectOneAcrossR{{relationId}}()
+    {
+        return this._relationR{{relationId}};
+    }
+    ]][[multiRelations|
+    public boolean isRelatedAcrossR{{relationId}}()
+    {
+        return !this._relationsR{{relationId}}.isEmpty();
+    }
+
+    public ArrayList<{{relatedClassName}}> selectManyAcrossR{{relationId}}(AttributeMatcher<{{relatedClassName}}> attributeMatcher)
+    {
+        return RelationManager.selectMany(this._relationsR{{relationId}}, attributeMatcher);
+    }
+
+    public ArrayList<{{relatedClassName}}> selectManyAcrossR{{relationId}}()
+    {
+        return this._relationsR{{relationId}};
+    }
+
+    public {{relatedClassName}} selectAnyAcrossR{{relationId}}(AttributeMatcher<{{relatedClassName}}> attributeMatcher)
+    {
+        return RelationManager.selectAny(this._relationsR{{relationId}}, attributeMatcher);
+    }
+
+    public {{relatedClassName}} selectAnyAcrossR{{relationId}}()
+    {
+        return RelationManager.selectAny(this._relationsR{{relationId}});
+    }]]
+}

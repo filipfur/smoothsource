@@ -2,9 +2,9 @@ package {{packageName}};
 
 class _{{className}}
 {
-    [[attributes@// Attributes|
+    [[attributes|
     private {{attributeType}} _{{attributeName}};]]
-    [[singleRelations@// Relations|
+    [[singleRelations|
     private {{relatedClassName}} _relationR{{relationId}};]]
     [[multiRelations|
     private final ArrayList<{{relatedClassName}}> _relationR{{relationId}};]]
@@ -16,13 +16,13 @@ class _{{className}}
         this._relationsR{{relationId}} = new ArrayList<{{relatedClassName}}>();]]
     }
 
-    [[attributes@// Getters|
+    [[attributes|
     public {{attributeType}} get{{attributeName:upperCC}}()
     {
         return _{{attributeName}};
     }
     ]]
-    [[attributes@// Setters|
+    [[attributes|
     public void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
     {
         this._{{attributeName}} = {{attributeName}};

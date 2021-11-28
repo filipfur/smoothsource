@@ -1,12 +1,11 @@
 from modelloader import ModelLoader
 from modelcompiler import ModelCompiler
 from model.model import Model
-from template import Template
-import template
+import template.template
 
 class smoothsource:
 
-    template = template
+    template = template.template
 
     def __init__(self):
         self.templates = {}
@@ -22,7 +21,7 @@ class smoothsource:
         if templatepath in self.templates:
             tmpl = self.templates[templatepath]
         else:
-            tmpl = Template(templatepath)
+            tmpl = template.template.Template(templatepath)
             self.templates[templatepath] = tmpl
         return tmpl
 

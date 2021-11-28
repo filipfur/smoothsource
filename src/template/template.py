@@ -1,3 +1,5 @@
+from template.segment import Segment
+
 TemplateDir = "template"
 
 class Java:
@@ -12,6 +14,10 @@ class Template:
         self.templatepath = templatepath
         with open(templatepath, 'r') as f:
             self.content = f.read()
+        self.segment = Segment(self.content, root=True)
+        print(str(self.segment))
+
+
 
     def upperCC(self, text): # TODO: rename to :class ?
         return text.capitalize()
@@ -88,6 +94,7 @@ class Template:
 
     def templify(self, parameters):
         self.parameters = parameters
-        content = self.populateArrays(self.content, self.parameters)
-        content = self.populateParameters(content, self.parameters)
+        #content = self.populateArrays(self.content, self.parameters)
+        #content = self.populateParameters(content, self.parameters)
+        content = self.segment.populate([parameters], 0)
         return content

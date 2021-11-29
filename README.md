@@ -1,7 +1,7 @@
 # smoothsource
 Template-based code generation engine in python 3.
 ## Java model compiler
-Generate java code from source code:
+Generate java source code from example model
 ```
 python src/main.py
 ```

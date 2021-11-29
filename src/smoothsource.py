@@ -29,7 +29,7 @@ class smoothsource:
         tmpl = self.createTemplate(templatepath)
         tmpl.templify(parameters)
 
-    def createModelCompiler(self, model, classtemplate, genpath):
+    def createModelCompiler(self, model, classtemplate, selectortemplate, genpath):
         if not self.modelcompiler:
-            self.modelcompiler = ModelCompiler(model, classtemplate, genpath)
+            self.modelcompiler = ModelCompiler(model, classtemplate, selectortemplate, genpath)
         return self.modelcompiler

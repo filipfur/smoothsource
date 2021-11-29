@@ -1,0 +1,42 @@
+package {{packageName}}.selectors;
+import {{userClassPath}}.{{className}};
+[[imports|import {{classPath}};]]
+<<?attributes|import util.Condition;?>>
+
+public class {{className}}Selector
+{
+    [[attributes|
+    public static class {{attributeName}} extends Condition<{{className}}>
+    {
+        private final {{attributeType}} {{attributeName}};
+
+        private {{attributeName}}(Operator operator, {{attributeType}} {{attributeName}})
+        {
+            super(operator);
+            this.{{attributeName}} = {{attributeName}};
+        }
+
+        @Override
+        public boolean matching({{className}} {{className:lowerCC}})
+        {
+            boolean rVal = evaluateSelf({{className:lowerCC}}.get{{attributeName:upperCC}}().compareTo(this.{{attributeName}}));
+            rVal = super.evaluate({{className:lowerCC}}, rVal);
+            return rVal;
+        }
+
+        public static {{attributeName}} equals({{attributeType}} {{attributeName}})
+        {
+            return new {{attributeName}}(Operator.EQUALS, {{attributeName}});
+        }
+
+        public static {{attributeName}} lessThan({{attributeType}} {{attributeName}})
+        {
+            return new {{attributeName}}(Operator.LESS_THAN, {{attributeName}});
+        }
+
+        public static {{attributeName}} greaterThan({{attributeType}} {{attributeName}})
+        {
+            return new {{attributeName}}(Operator.GREATER_THAN, {{attributeName}});
+        }
+    }]]
+}

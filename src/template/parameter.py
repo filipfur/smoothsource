@@ -10,7 +10,7 @@ class Parameter(Fragment):
             self._operands.append(self.__getattribute__(op))
 
     def upperCC(self, text): # TODO: rename to :class ?
-        return text.capitalize()
+        return text[0].upper() + text[1:]
 
     def lowerCC(self, text): # TODO: rename to :variable ?
         return text[0].lower() + text[1:]

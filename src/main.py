@@ -16,8 +16,9 @@ def main():
     #smoothsrc.populateTemplate(smoothsource.template.Java.ClassTemplate, mockParams)
 
     classTemplate = smoothsrc.createTemplate(smoothsource.template.Java.xtUMLClassTemplate)
+    selectorTemplate = smoothsrc.createTemplate(smoothsource.template.Java.xtUMLClassSelectorTemplate)
 
-    modelcompiler = smoothsrc.createModelCompiler(model, classTemplate, "test/xtuml/gen")
+    modelcompiler = smoothsrc.createModelCompiler(model, classTemplate, selectorTemplate, "test/xtuml/src/gen")
 
     modelcompiler.compileAll(persist=True)
 

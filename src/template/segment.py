@@ -3,15 +3,30 @@ from template.fragment import Fragment
 from template.text import Text
 from template.parameter import Parameter
 
+class Container:
+
+    Max = 1000000
+
+    def __init__(self, startToken, start):
+        self._startToken = startToken
+        self._start = start
+        if self._start == -1:
+            self._start = Container.Max
+
 class Segment(Fragment):
 
-    def __init__(self, content, root=False):
+    def __init__(self, content, root=False, delim="", iscond=False):
         self._fragments = []
         self._name = ""
         self._root = root
+        self._iscond = iscond
+        self._delim = delim
+        self._begin = ""
+        self._end = ""
         if not root:
             pipeIndex = content.find("|")
             self._name = content[0:pipeIndex]
+            self.expandName()
             content = content[pipeIndex + 1:]
         self._content = content
         done = False
@@ -19,21 +34,75 @@ class Segment(Fragment):
         while i < len(content) and not done:
             arrayStart = content.find("[[", i)
             paramStart = content.find("{{", i)
-            if paramStart == -1 and arrayStart == -1:
+            condStart = content.find("<<?", i)
+
+            containers = sorted([Container("[[", arrayStart), Container("{{", paramStart), Container("<<?", condStart)], key=lambda x: x._start)
+
+            container = containers[0]
+
+            if container._start == Container.Max:
                 self._fragments.append(Text(content[i:]))
                 done = True
-            elif paramStart == -1 or (arrayStart != -1 and arrayStart < paramStart):
+            elif container._startToken == "<<?":
+                lastNewLine = content.rfind("\n", 0, condStart)
+                if i < condStart:
+                    self._fragments.append(Text(content[i:lastNewLine]))
+                delim = content[lastNewLine:condStart]
+                arrayEnd = content.find("?>>", condStart + 3)
+                self._fragments.append(Segment(content[condStart + 3:arrayEnd], delim=delim, iscond=True)) #TODO: handle nested conditions
+                i = arrayEnd + 3
+            elif container._startToken == "[[":
+                lastNewLine = content.rfind("\n", 0, arrayStart)
                 if i < arrayStart:
-                    self._fragments.append(Text(content[i:arrayStart]))
+                    self._fragments.append(Text(content[i:lastNewLine]))
+                delim = content[lastNewLine:arrayStart]
                 arrayEnd = content.find("]]", arrayStart + 2)
-                self._fragments.append(Segment(content[arrayStart + 2:arrayEnd])) #TODO: handle nested arrays
+                self._fragments.append(Segment(content[arrayStart + 2:arrayEnd], delim=delim)) #TODO: handle nested arrays
                 i = arrayEnd + 2
-            else:
+            elif container._startToken == "{{":
                 if i < paramStart:
                     self._fragments.append(Text(content[i:paramStart]))
                 paramEnd = content.find("}}", paramStart + 2)
                 self._fragments.append(Parameter(content[paramStart + 2:paramEnd]))
                 i = paramEnd + 2
+
+
+    def begin(self, text):
+        self._begin = text
+
+    def end(self, text):
+        self._end = text
+
+    def expandName(self):
+        if ":" in self._name:
+            startExtra = self._name.find(":")
+            extra = self._name[startExtra:]
+            self._name = self._name[0:startExtra]
+            done = False
+            i = 0
+            while not done:
+                startExtra = extra.find(":", i)
+                if startExtra == -1: # -1
+                    done = True
+                else:
+                    startExtra2 = extra.find(":", startExtra + 1)
+                    startParam2 = extra.find("@", startExtra + 1)
+                    startExtra2 = 1000000 if startExtra2 == -1 else startExtra2
+                    startParam2 = 1000000 if startParam2 == -1 else startParam2
+                    if startParam2 == startExtra2: # -1
+                        done = True
+                        opName = extra[startExtra+1:]
+                        self.__getattribute__(opName)()
+                    elif startExtra2 < startParam2 and startExtra2:
+                        opName = extra[startExtra+1:startExtra2]
+                        self.__getattribute__(opName)()
+                        i = startExtra2
+                    elif startParam2 < startExtra2:
+                        opName = extra[startExtra+1:startParam2]
+                        endParam = extra.find("@", startParam2 + 1)
+                        opParam = extra[startParam2+1:endParam]
+                        self.__getattribute__(opName)(opParam)
+                        i = endParam + 1
 
     def populateFragments(self, data, scope):
         text = ""
@@ -51,12 +120,21 @@ class Segment(Fragment):
                 exit(1)
             arrayData = data[scope][self._name]
             scope += 1
-            for ad in arrayData:
+            delim = ""
+            if type(arrayData) == bool and self._iscond:
+                if arrayData:
+                    arrayData = [{}]
+                else:
+                    arrayData = []
+            for i, ad in enumerate(arrayData):
                 data.append(ad)
-                text = self.populateFragments(data, scope)
+                text += self._delim + self._begin + self.populateFragments(data, scope)
+                if i == len(arrayData) - 1:
+                    text += self._end
+                self._begin = ""
                 data.pop()
-        if text == "":
-            print("Empty frag: %s" % self._name)
+                if self._iscond:
+                    break
         return text
         
 

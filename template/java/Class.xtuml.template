@@ -1,33 +1,37 @@
-package {{packageName}};
+package {{packageName}}.classes;
+import {{userClassPath}}.{{className}};
+[[imports|import {{classPath}};]]
+[[singleRelations|import {{userClassPath}}.{{relatedClassName}};]]
+[[multiRelations|import {{userClassPath}}.{{relatedClassName}};]]
+<<?multiRelations|import java.util.ArrayList;
+import util.AttributeMatcher;
+import util.RelationManager;?>>
 
-class _{{className}}
+public class _{{className}}
 {
-    [[attributes|
-    private {{attributeType}} _{{attributeName}};]]
-    [[singleRelations|
-    private {{relatedClassName}} _relationR{{relationId}};]]
-    [[multiRelations|
-    private final ArrayList<{{relatedClassName}}> _relationR{{relationId}};]]
+    [[attributes:begin@// <Attributes
+    @:end@ // Attributes>@|private {{attributeType}} _{{attributeName}};]]
+    [[singleRelations|private {{relatedClassName}} _relationR{{relationId}};]]
+    [[multiRelations|private final ArrayList<{{relatedClassName}}> _relationsR{{relationId}};]]
     
     public _{{className}}()
-    {[[singleRelations|
-        this._relationR{{relationId}} = null;
-        ]][[multiRelations|
-        this._relationsR{{relationId}} = new ArrayList<{{relatedClassName}}>();]]
+    {
+        [[singleRelations|this._relationR{{relationId}} = null;]]
+        [[multiRelations|this._relationsR{{relationId}} = new ArrayList<{{relatedClassName}}>();]]
     }
-
-    [[attributes|
+    [[attributes:begin@
+    // Getter-methods@|
     public {{attributeType}} get{{attributeName:upperCC}}()
     {
         return _{{attributeName}};
-    }
-    ]]
-    [[attributes|
+    }]]
+    [[attributes:begin@
+    // Setter-methods@|
     public void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
     {
         this._{{attributeName}} = {{attributeName}};
-    }
-    ]][[singleRelations|
+    }]]
+    [[singleRelations|
     public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
     {
         if(this._relationR{{relationId}} != {{relatedClassName:lowerCC}})
@@ -35,13 +39,23 @@ class _{{className}}
             this._relationR{{relationId}} = {{relatedClassName:lowerCC}};
             {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}(({{className}}) this);
         }
-    }]][[multiRelations|
+    }
+    
+    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    {
+        if(this._relationR{{relationId}} == {{relatedClassName:lowerCC}})
+        {
+            this._relationR{{relationId}}.unrelateAcrossR{{relationId}}(({{className}}) this);
+            this._relationR{{relationId}} = null;
+        }
+    }]]
+    [[multiRelations|
     public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
     {
         if(!this._relationsR{{relationId}}.contains(car))
         {
             this._relationsR{{relationId}}.add(car);
-            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}({{className}} this);
+            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}(({{className}}) this);
         }
     }
 
@@ -49,10 +63,10 @@ class _{{className}}
     {
         if(this._relationsR{{relationId}}.remove({{relatedClassName:lowerCC}}))
         {
-            {{relatedClassName:lowerCC}}.unrelateAcrossR{{relationId}}();
+            {{relatedClassName:lowerCC}}.unrelateAcrossR{{relationId}}(({{className}}) this);
         }
-    }
-    ]][[singleRelations|
+    }]]
+    [[singleRelations|
     public boolean isRelatedAcrossR{{relationId}}()
     {
         return this._relationR{{relationId}} != null;
@@ -61,8 +75,8 @@ class _{{className}}
     public {{relatedClassName}} selectOneAcrossR{{relationId}}()
     {
         return this._relationR{{relationId}};
-    }
-    ]][[multiRelations|
+    }]]
+    [[multiRelations|
     public boolean isRelatedAcrossR{{relationId}}()
     {
         return !this._relationsR{{relationId}}.isEmpty();

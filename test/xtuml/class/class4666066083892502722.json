@@ -1,1 +1,1 @@
-{"uid":"class4666066083892502722.json","name":"Car","attributes":{"licensePlate": "String", "price": "Integer"}}
+{"uid":"class4666066083892502722.json","name":"Car","attributes":{"licenseNumber": "String", "numberOfDoors": "Integer", "color": "Integer"}}

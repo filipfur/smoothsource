@@ -22,7 +22,10 @@ public class Main
         {
             System.out.println(car.getLicenseNumber());
         }
-        System.out.println("Car with color 2 and 2 doors: " + retailer.selectAnyAcrossR4(CarSelector.color.equals(2).and(CarSelector.numberOfDoors.equals(2))).getLicenseNumber());
+        Car carWithTwoDoors = retailer.selectAnyAcrossR4(CarSelector.color.equals(2).and(CarSelector.numberOfDoors.equals(2)));
+        Retailer ret = carWithTwoDoors.selectOneAcrossR4();
+        assert ret == retailer;
+        System.out.println("Car with color 2 and 2 doors: " + carWithTwoDoors.getLicenseNumber());
         System.out.println("Cars with more than 2 doors or color greater than 3:");
         for(Car car : retailer.selectManyAcrossR4(CarSelector.numberOfDoors.greaterThan(2).or(CarSelector.color.greaterThan(3))))
         {

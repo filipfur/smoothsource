@@ -3,9 +3,9 @@ import {{userClassPath}}.{{className}};
 [[imports|import {{classPath}};]]
 [[singleRelations|import {{userClassPath}}.{{relatedClassName}};]]
 [[multiRelations|import {{userClassPath}}.{{relatedClassName}};]]
-<<?multiRelations|import java.util.ArrayList;
+<?multiRelations|import java.util.ArrayList;
 import util.AttributeMatcher;
-import util.RelationManager;?>>
+import util.RelationManager;?>
 
 public class _{{className}}
 {
@@ -21,49 +21,49 @@ public class _{{className}}
     }
     [[attributes:begin@
     // Getter-methods@|
-    public {{attributeType}} get{{attributeName:upperCC}}()
+    public {{attributeType}} get{{attributeName:class}}()
     {
         return _{{attributeName}};
     }]]
     [[attributes:begin@
     // Setter-methods@|
-    public void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
+    public void set{{attributeName:class}}({{attributeType}} {{attributeName}})
     {
         this._{{attributeName}} = {{attributeName}};
     }]]
     [[singleRelations|
-    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:variable}})
     {
-        if(this._relationR{{relationId}} != {{relatedClassName:lowerCC}})
+        if(this._relationR{{relationId}} != {{relatedClassName:variable}})
         {
-            this._relationR{{relationId}} = {{relatedClassName:lowerCC}};
-            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}(({{className}}) this);
+            this._relationR{{relationId}} = {{relatedClassName:variable}};
+            {{relatedClassName:variable}}.relateAcrossR{{relationId}}(({{className}}) this);
         }
     }
     
-    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:variable}})
     {
-        if(this._relationR{{relationId}} == {{relatedClassName:lowerCC}})
+        if(this._relationR{{relationId}} == {{relatedClassName:variable}})
         {
             this._relationR{{relationId}}.unrelateAcrossR{{relationId}}(({{className}}) this);
             this._relationR{{relationId}} = null;
         }
     }]]
     [[multiRelations|
-    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    public void relateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:variable}})
     {
         if(!this._relationsR{{relationId}}.contains(car))
         {
             this._relationsR{{relationId}}.add(car);
-            {{relatedClassName:lowerCC}}.relateAcrossR{{relationId}}(({{className}}) this);
+            {{relatedClassName:variable}}.relateAcrossR{{relationId}}(({{className}}) this);
         }
     }
 
-    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:lowerCC}})
+    public void unrelateAcrossR{{relationId}}({{relatedClassName}} {{relatedClassName:variable}})
     {
-        if(this._relationsR{{relationId}}.remove({{relatedClassName:lowerCC}}))
+        if(this._relationsR{{relationId}}.remove({{relatedClassName:variable}}))
         {
-            {{relatedClassName:lowerCC}}.unrelateAcrossR{{relationId}}(({{className}}) this);
+            {{relatedClassName:variable}}.unrelateAcrossR{{relationId}}(({{className}}) this);
         }
     }]]
     [[singleRelations|

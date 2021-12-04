@@ -13,7 +13,7 @@ class ModelLoader:
 
 
     def __init__(self, model, modelpath):
-        self.model = Model()
+        self.model = model
         self.classpath = modelpath + "/class/"
         self.relationpath = modelpath + "/relation/"
 
@@ -40,4 +40,3 @@ class ModelLoader:
             self.loadClass(fpath)
         for fpath in os.listdir(self.relationpath):
             self.loadRelation(fpath)
-        return self.model

@@ -5,8 +5,8 @@ TemplateDir = "template"
 class Java:
     JavaDir = TemplateDir + "/java"
     ClassTemplate = JavaDir + "/Class.template"
-    xtUMLClassTemplate = JavaDir + "/Class.xtuml.template"
-    xtUMLClassSelectorTemplate = JavaDir + "/ClassSelector.xtuml.template"
+    xtUMLClassTemplate = JavaDir + "/Class.smoothsource"
+    xtUMLClassSelectorTemplate = JavaDir + "/ClassSelector.smoothsource"
 
 class Template:
 
@@ -17,7 +17,6 @@ class Template:
             self.content = f.read()
         self.segment = Segment(self.content, root=True)
 
-    def templify(self, parameters):
-        self.parameters = parameters
-        content = self.segment.populate([parameters], 0)
+    def generate(self, payload):
+        content = self.segment.populate([payload], 0)
         return content

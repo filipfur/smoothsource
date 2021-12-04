@@ -1,35 +1,32 @@
-from modelloader import ModelLoader
-from modelcompiler import ModelCompiler
-from model.model import Model
 import template.template
+import sys
+import os
+import getopt
 
 class smoothsource:
 
     template = template.template
 
-    def __init__(self):
-        self.templates = {}
-        self.modelcompiler = None
+    templates = {}
 
-    def loadModel(self, modelpath):
-        model = Model()
-        modelloader = ModelLoader(model, modelpath)
-        return modelloader.load()
-
-    def createTemplate(self, templatepath):
+    def createTemplate(templatepath):
         tmpl = None
-        if templatepath in self.templates:
-            tmpl = self.templates[templatepath]
+        if templatepath in smoothsource.templates:
+            tmpl = smoothsource.templates[templatepath]
         else:
             tmpl = template.template.Template(templatepath)
-            self.templates[templatepath] = tmpl
+            smoothsource.templates[templatepath] = tmpl
         return tmpl
 
-    def populateTemplate(self, templatepath, parameters):
-        tmpl = self.createTemplate(templatepath)
-        tmpl.templify(parameters)
+    def populateTemplate(templatepath, parameters):
+        tmpl = smoothsource.createTemplate(templatepath)
+        tmpl.generate(parameters)
 
-    def createModelCompiler(self, model, classtemplate, selectortemplate, genpath):
-        if not self.modelcompiler:
-            self.modelcompiler = ModelCompiler(model, classtemplate, selectortemplate, genpath)
-        return self.modelcompiler
+
+def main():
+    opts, args = getopt.getopt(sys.argv[1:], "vt:p:", ["version", "template=", "payload="])
+    print(opts)
+    #smoothsource
+
+if __name__ == "__main__":
+    main()

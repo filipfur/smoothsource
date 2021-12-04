@@ -26,18 +26,18 @@ class ModelCompiler:
 
     def compileAll(self, persist=True):
         for _class in self.model.classes().values():
-            tparams = self.templateParameters(_class)
+            tparams = self.templatePayload(_class)
 
             fpath = self.classpath + "/_" + _class.name() + ".java"
-            text = self.classtemplate.templify(tparams)
+            text = self.classtemplate.generate(tparams)
             self.create(fpath, text, persist)
 
             fpath = self.selectorpath + "/" + _class.name() + "Selector.java"
-            text = self.selectortemplate.templify(tparams)
+            text = self.selectortemplate.generate(tparams)
             self.create(fpath, text, persist)
             
 
-    def templateParameters(self, _class):
+    def templatePayload(self, _class):
         attributes = []
         singleRelations = []
         multiRelations = []

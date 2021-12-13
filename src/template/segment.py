@@ -139,7 +139,9 @@ class Segment(Fragment):
                 exit(1)
             arrayData = data[scope][self._name]
             scope += 1
-            delim = ""
+            delim = self._delim
+            begin = self._begin
+            end = self._end
             if self._iscond:
                 if arrayData == None:
                     arrayData = []
@@ -155,10 +157,10 @@ class Segment(Fragment):
                         arrayData = [{self._name: arrayData}]
             for i, ad in enumerate(arrayData):
                 data.append(ad)
-                text += self._delim + self._begin + self.populateFragments(data, scope)
+                text += delim + begin + self.populateFragments(data, scope)
                 if i == len(arrayData) - 1:
-                    text += self._end
-                self._begin = ""
+                    text += end
+                begin = ""
                 data.pop()
                 if self._iscond:
                     break

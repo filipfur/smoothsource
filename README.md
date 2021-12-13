@@ -2,12 +2,6 @@
 Template-based code generation engine in python 3.
 The smoothsource engine decomposes a template file into fragments. A fragment can be either plain text, a parameter, or a segment. A segment is either an array segment or a condition segment. Segments contains fragments, i.e. plain text, parameters or other segments. The template file itself is an implicit segment (root segment).
 
-<style type="text/css">
-    img {
-        image-rendering: pixelated;
-        border: 4px solid powderblue;
-    }
-</style>
 ![image info](./images/smoothsource.png)
 
 A class diagram showing smoothsource classes.
@@ -127,6 +121,10 @@ class {{paramScope0}}:
 ```
 ## Syntax highlighting
 A syntax highlighting extension for VS Code is can be cloned from https://github.com/filipfur/smoothsource-highlighting.git. To install the extension, copy the extension directory to <user home>/.vscode/extensions and restart VS Code. Smoothsource template files with file extension .smoothsource will now be syntax highlighted.
+
+![image info](./images/syntax_highlighting.png)
+
+VS Code with .smoothsource syntax highlighting.
 
 ## Examples
 This repository includes some example projects for demonstration and testing purposes.

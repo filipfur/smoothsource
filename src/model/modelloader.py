@@ -6,6 +6,8 @@ from model._class import Class
 from model.relation import Relation
 from model.association import Association
 from model.cardinality import Cardinality
+from model.generalization import Generalization
+from model.assoclink import AssociationLink
 
 class ModelLoader:
 
@@ -16,6 +18,8 @@ class ModelLoader:
         self.model = model
         self.classpath = modelpath + "/class/"
         self.relationpath = modelpath + "/relation/"
+        self.generalizationpath = modelpath + "/generalization/"
+        self.assoclinkpath = modelpath + "/association_link/"
 
 
     def loadClass(self, uid):
@@ -35,8 +39,25 @@ class ModelLoader:
             rhs = self.createAssociation(obj["rhs"])
             self.model.addRelation(Relation(obj["uid"], obj["id"], lhs, rhs))
 
+    def loadGeneralization(self, uid):
+        with open(self.generalizationpath + uid) as f:
+            obj = json.load(f)
+            generalization = Generalization(obj["uid"], self.model.classByUid(obj["superClass"]), self.model.classByUid(obj["subClass"]))
+            self.model.addGeneralization(generalization)
+
+    def loadAssociationLink(self, uid):
+        with open(self.assoclinkpath + uid) as f:
+            obj = json.load(f)
+            assoclink = AssociationLink(obj["uid"], self.model.classByUid(obj["class"]), self.model.relationByUid(obj["relation"]))
+            self.model.addAssociationLink(assoclink)
+
+    def loadPath(self, path, method):
+        if os.path.isdir(path):
+            for fpath in os.listdir(path):
+                method(fpath)
+
     def load(self):
-        for fpath in os.listdir(self.classpath):
-            self.loadClass(fpath)
-        for fpath in os.listdir(self.relationpath):
-            self.loadRelation(fpath)
+        self.loadPath(self.classpath, self.loadClass)
+        self.loadPath(self.relationpath, self.loadRelation)
+        self.loadPath(self.generalizationpath, self.loadGeneralization)
+        self.loadPath(self.assoclinkpath, self.loadAssociationLink)

@@ -1,7 +1,7 @@
 package {{packageName}}.selectors;
 import {{userClassPath}}.{{className}};
 [[imports|import {{classPath}};]]
-<<?attributes|import util.Condition;?>>
+<?attributes|import util.Condition;?>
 
 public class {{className}}Selector
 {

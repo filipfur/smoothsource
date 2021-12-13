@@ -26,7 +26,7 @@ class ModelCompiler:
 
     def compileAll(self, persist=True):
         for _class in self.model.classes().values():
-            tparams = self.templatePayload(_class)
+            tparams = self.templatePayload(_class, self.model.superClassOf(_class))
 
             fpath = self.classpath + "/_" + _class.name() + ".java"
             text = self.classtemplate.generate(tparams)
@@ -37,7 +37,7 @@ class ModelCompiler:
             self.create(fpath, text, persist)
             
 
-    def templatePayload(self, _class):
+    def templatePayload(self, _class, superClass):
         attributes = []
         singleRelations = []
         multiRelations = []
@@ -52,11 +52,19 @@ class ModelCompiler:
         classAttribs = _class.attributes()
         for aName in classAttribs:
             attributes.append({"attributeName": aName, "attributeType": classAttribs[aName]})
-        params = {"packageName": "gen",
+
+        superClasses = []
+        if superClass is not None:
+            superClasses.append(superClass.name())
+
+        payload = {
+            "packageName": "gen",
             "imports": [],# [{"classPath": classPath} for classPath in ["util.AttributeMatcher", "util.RelationManager"]],
             "userClassPath": "user",
             "className": _class.name(),
             "attributes": attributes,
             "singleRelations": singleRelations,
-            "multiRelations": multiRelations}
-        return params
+            "multiRelations": multiRelations,
+            "superClass": ("" if superClass is None else superClass.name())
+        }
+        return payload

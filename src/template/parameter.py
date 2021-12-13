@@ -15,9 +15,13 @@ class Parameter(Fragment):
         return str(datetime.datetime.now())
 
     def _upperCC(self, text):
+        if(len(text) < 2):
+            return text
         return text[0].upper() + text[1:]
 
     def _lowerCC(self, text):
+        if(len(text) < 2):
+            return text
         return text[0].lower() + text[1:]
 
     def _variable(self, text):

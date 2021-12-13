@@ -34,28 +34,47 @@ class Segment(Fragment):
         while i < len(content) and not done:
             arrayStart = content.find("[[", i)
             paramStart = content.find("{{", i)
-            condStart = content.find("<<?", i)
+            condStart = content.find("<?", i)
 
-            containers = sorted([Container("[[", arrayStart), Container("{{", paramStart), Container("<<?", condStart)], key=lambda x: x._start)
+            containers = sorted([Container("[[", arrayStart), Container("{{", paramStart), Container("<?", condStart)], key=lambda x: x._start)
 
             container = containers[0]
 
             if container._start == Container.Max:
                 self._fragments.append(Text(content[i:]))
                 done = True
-            elif container._startToken == "<<?":
+            elif container._startToken == "<?":
                 lastNewLine = content.rfind("\n", 0, condStart)
                 if i < condStart:
-                    self._fragments.append(Text(content[i:lastNewLine]))
-                delim = content[lastNewLine:condStart]
-                arrayEnd = content.find("?>>", condStart + 3)
-                self._fragments.append(Segment(content[condStart + 3:arrayEnd], delim=delim, iscond=True)) #TODO: handle nested conditions
-                i = arrayEnd + 3
+                    text = content[i:lastNewLine]
+                    print("text=", text)
+                    self._fragments.append(Text(text))
+                
+                delim = ""
+                for i in range(1, condStart):
+                    c = content[condStart - i]
+                    if c == " " or c == "\n":
+                        delim = c + delim
+                    else:
+                        break
+
+                print("delim=", delim)
+                arrayEnd = content.find("?>", condStart + 2)
+                self._fragments.append(Segment(content[condStart + 2:arrayEnd], delim=delim, iscond=True)) #TODO: handle nested conditions
+                i = arrayEnd + 2
             elif container._startToken == "[[":
                 lastNewLine = content.rfind("\n", 0, arrayStart)
                 if i < arrayStart:
                     self._fragments.append(Text(content[i:lastNewLine]))
-                delim = content[lastNewLine:arrayStart]
+                
+                delim = ""
+                for i in range(1, arrayStart):
+                    c = content[arrayStart - i]
+                    if c == " " or c == "\n":
+                        delim = c + delim
+                    else:
+                        break
+
                 arrayEnd = content.find("]]", arrayStart + 2)
                 self._fragments.append(Segment(content[arrayStart + 2:arrayEnd], delim=delim)) #TODO: handle nested arrays
                 i = arrayEnd + 2
@@ -121,11 +140,19 @@ class Segment(Fragment):
             arrayData = data[scope][self._name]
             scope += 1
             delim = ""
-            if type(arrayData) == bool and self._iscond:
-                if arrayData:
-                    arrayData = [{}]
-                else:
+            if self._iscond:
+                if arrayData == None:
                     arrayData = []
+                elif type(arrayData) == bool:
+                    if arrayData:
+                        arrayData = [{}]
+                    else:
+                        arrayData = []
+                elif type(arrayData) == str:
+                    if len(arrayData) == 0:
+                        arrayData = []
+                    else:
+                        arrayData = [{self._name: arrayData}]
             for i, ad in enumerate(arrayData):
                 data.append(ad)
                 text += self._delim + self._begin + self.populateFragments(data, scope)

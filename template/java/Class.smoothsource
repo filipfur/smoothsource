@@ -7,7 +7,7 @@ import {{userClassPath}}.{{className}};
 import util.AttributeMatcher;
 import util.RelationManager;?>
 
-public class _{{className}}
+public class _{{className}}<?superClass| extends {{superClass}}?>
 {
     [[attributes:begin@// <Attributes
     @:end@ // Attributes>@|private {{attributeType}} _{{attributeName}};]]

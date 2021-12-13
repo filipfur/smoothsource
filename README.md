@@ -1,6 +1,16 @@
 # smoothsource
 Template-based code generation engine in python 3.
 The smoothsource engine decomposes a template file into fragments. A fragment can be either plain text, a parameter, or a segment. A segment is either an array segment or a condition segment. Segments contains fragments, i.e. plain text, parameters or other segments. The template file itself is an implicit segment (root segment).
+
+<style type="text/css">
+    img {
+        image-rendering: pixelated;
+        border: 4px solid powderblue;
+    }
+</style>
+![image info](./images/smoothsource.png)
+
+A class diagram showing smoothsource classes.
 ## Payload
 During generation of a template every fragment is populated with payload data. The payload is given by the user as input to the generation.
 ``` python
@@ -129,6 +139,10 @@ python src/shoppinglist.py
 
 ### Model to java generation
 A simple java test application.
+
+![image info](./images/cars.png)
+
+A class diagram of the example domain 'cars'.
 ```bash
 # Generate java source code from example model
 python src/modeltojava.py

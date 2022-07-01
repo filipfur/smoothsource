@@ -47,7 +47,6 @@ class Segment(Fragment):
                 lastNewLine = content.rfind("\n", 0, condStart)
                 if i < condStart:
                     text = content[i:lastNewLine]
-                    print("text=", text)
                     self._fragments.append(Text(text))
                 
                 delim = ""
@@ -58,7 +57,6 @@ class Segment(Fragment):
                     else:
                         break
 
-                print("delim=", delim)
                 arrayEnd = content.find("?>", condStart + 2)
                 self._fragments.append(Segment(content[condStart + 2:arrayEnd], delim=delim, iscond=True)) #TODO: handle nested conditions
                 i = arrayEnd + 2

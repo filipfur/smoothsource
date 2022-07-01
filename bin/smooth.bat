@@ -1,0 +1,1 @@
+@set PYTHONPATH=.;%PYTHONPATH% & python "%~dp0\..\src\smoothsource.py" %*

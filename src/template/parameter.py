@@ -29,6 +29,12 @@ class Parameter(Fragment):
 
     def _class(self, text):
         return self._upperCC(text)
+        
+    def _lower(self, text):
+        return text.lower()
+
+    def _upper(self, text):
+        return text.upper()
 
     def transform(self, text):
         for op in self._operands:

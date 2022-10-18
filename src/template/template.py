@@ -1,6 +1,8 @@
 from template.segment import Segment
 
-TemplateDir = "template"
+import os
+
+TemplateDir = os.path.dirname(os.path.realpath(__file__)) + "/" + "template"
 
 class Java:
     JavaDir = TemplateDir + "/java"

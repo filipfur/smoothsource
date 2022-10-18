@@ -5,6 +5,15 @@ from model.modelcompiler import ModelCompiler
 import getopt
 import sys
 
+def translate(modelpath, genpath):
+    model = Model()
+    modelloader = ModelLoader(model, modelpath)
+    modelloader.load()
+    classtemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassTemplate)
+    selectortemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassSelectorTemplate)
+    modelcompiler = ModelCompiler(model, classtemplate, selectortemplate, genpath)
+    modelcompiler.compileAll(persist=True)
+    return True
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "vm:o:", ["version", "model-path=", "output-dir="])
@@ -21,16 +30,7 @@ def main():
     print("modelpath=%s" % modelpath)
     print("genpath=%s" % genpath)
 
-    model = Model()
-    modelloader = ModelLoader(model, modelpath)
-    modelloader.load()
-
-    classtemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassTemplate)
-    selectortemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassSelectorTemplate)
-
-    modelcompiler = ModelCompiler(model, classtemplate, selectortemplate, genpath)
-
-    modelcompiler.compileAll(persist=True)
+    translate(modelpath, genpath)
 
 
 if __name__ == "__main__":

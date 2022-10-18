@@ -7,24 +7,24 @@ class Model:
         self._associationLinks = {}
 
     def addClass(self, _class):
-        self._classes[_class.uid()] = _class
+        self._classes[_class.name()] = _class
 
-    def classByUid(self, uid):
-        return self._classes[uid]
+    def classByName(self, name):
+        return self._classes[name]
 
     def addRelation(self, relation):
         lClass = relation.leftAssociation()._class().relate(relation)
         rClass = relation.rightAssociation()._class().relate(relation)
-        self._relations[relation.uid()] = relation
+        self._relations[relation.id()] = relation
 
     def addGeneralization(self, generalization):
-        self._generalizations[generalization.uid()] = generalization
+        self._generalizations[generalization.id()] = generalization
 
     def addAssociationLink(self, assoclink):
-        self._associationLinks[assoclink.uid()] = assoclink
+        self._associationLinks[assoclink.id()] = assoclink
 
-    def relationByUid(self, uid):
-        return self._relations[uid]
+    def relationById(self, id):
+        return self._relations[id]
 
     def classes(self):
         return self._classes

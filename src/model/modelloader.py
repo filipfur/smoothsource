@@ -16,39 +16,37 @@ class ModelLoader:
 
     def __init__(self, model, modelpath):
         self.model = model
-        self.classpath = modelpath + "/class/"
-        self.relationpath = modelpath + "/relation/"
-        self.generalizationpath = modelpath + "/generalization/"
-        self.assoclinkpath = modelpath + "/association_link/"
+        self.classpath = modelpath + "/classes/"
+        self.relationpath = modelpath + "/relations/"
+        self.generalizationpath = modelpath + "/generalizations/"
+        self.assoclinkpath = modelpath + "/association_links/"
 
 
-    def loadClass(self, uid):
-        with open(self.classpath + uid) as f:
+    def loadClass(self, fname):
+        with open(self.classpath + fname) as f:
             obj = json.load(f)
-            self.model.addClass(Class(obj["uid"], obj["name"], obj["attributes"]))
+            self.model.addClass(Class(obj["name"], obj["attributes"]))
 
     def createAssociation(self, obj):
-        return Association(self.model.classByUid(obj["class"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
+        return Association(self.model.classByName(obj["class"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
 
-    def loadRelation(self, uid):
-        with open(self.relationpath + uid) as f:
+    def loadRelation(self, fname):
+        with open(self.relationpath + fname) as f:
             obj = json.load(f)
-            lobj = obj["lhs"]
-            robj = obj["rhs"]
-            lhs = self.createAssociation(obj["lhs"])
-            rhs = self.createAssociation(obj["rhs"])
-            self.model.addRelation(Relation(obj["uid"], obj["id"], lhs, rhs))
+            lhs = self.createAssociation(obj["left"])
+            rhs = self.createAssociation(obj["right"])
+            self.model.addRelation(Relation(obj["id"], lhs, rhs))
 
-    def loadGeneralization(self, uid):
-        with open(self.generalizationpath + uid) as f:
+    def loadGeneralization(self, fname):
+        with open(self.generalizationpath + fname) as f:
             obj = json.load(f)
-            generalization = Generalization(obj["uid"], self.model.classByUid(obj["superClass"]), self.model.classByUid(obj["subClass"]))
+            generalization = Generalization(self.model.classByName(obj["superClass"]), self.model.classByName(obj["subClass"]))
             self.model.addGeneralization(generalization)
 
-    def loadAssociationLink(self, uid):
-        with open(self.assoclinkpath + uid) as f:
+    def loadAssociationLink(self, fname):
+        with open(self.assoclinkpath + fname) as f:
             obj = json.load(f)
-            assoclink = AssociationLink(obj["uid"], self.model.classByUid(obj["class"]), self.model.relationByUid(obj["relation"]))
+            assoclink = AssociationLink(self.model.classByName(obj["class"]), self.model.relationById(obj["relation"]))
             self.model.addAssociationLink(assoclink)
 
     def loadPath(self, path, method):

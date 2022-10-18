@@ -1,7 +1,6 @@
 class Class:
 
-    def __init__(self, uid, name, attributes):
-        self._uid = uid
+    def __init__(self, name, attributes):
         self._name = name
         self._attributes = attributes
         self._relations = []
@@ -16,9 +15,6 @@ class Class:
 
     def relations(self):
         return self._relations
-
-    def uid(self):
-        return self._uid
 
     def name(self):
         return self._name

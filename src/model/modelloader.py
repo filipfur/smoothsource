@@ -28,7 +28,7 @@ class ModelLoader:
             self.model.addClass(Class(obj["name"], obj["attributes"]))
 
     def createAssociation(self, obj):
-        return Association(self.model.classByName(obj["class"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
+        return Association(self.model.classByName(obj["className"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
 
     def loadRelation(self, fname):
         with open(self.relationpath + fname) as f:
@@ -46,7 +46,7 @@ class ModelLoader:
     def loadAssociationLink(self, fname):
         with open(self.assoclinkpath + fname) as f:
             obj = json.load(f)
-            assoclink = AssociationLink(self.model.classByName(obj["class"]), self.model.relationById(obj["relation"]))
+            assoclink = AssociationLink(self.model.classByName(obj["className"]), self.model.relationById(obj["relation"]))
             self.model.addAssociationLink(assoclink)
 
     def loadPath(self, path, method):

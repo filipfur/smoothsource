@@ -1,0 +1,1 @@
+{"name":"Retailer","attributes":[{"name": "owner", "type": "String"}, {"name": "taxRate", "type": "Float"}]}

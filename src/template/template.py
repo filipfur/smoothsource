@@ -2,13 +2,13 @@ from template.segment import Segment
 
 import os
 
-TemplateDir = os.path.dirname(os.path.realpath(__file__)) + "/" + "template"
+TemplateDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../template")
 
 class Java:
-    JavaDir = TemplateDir + "/java"
-    ClassTemplate = JavaDir + "/Class.template"
-    xtUMLClassTemplate = JavaDir + "/Class.smoothsource"
-    xtUMLClassSelectorTemplate = JavaDir + "/ClassSelector.smoothsource"
+    JavaDir = os.path.join(TemplateDir, "java")
+    ClassTemplate = os.path.join(JavaDir, "Class.template")
+    xtUMLClassTemplate = os.path.join(JavaDir, "Class.smoothsource")
+    xtUMLClassSelectorTemplate = os.path.join(JavaDir, "ClassSelector.smoothsource")
 
 class Template:
 

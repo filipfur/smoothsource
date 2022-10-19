@@ -1,7 +1,7 @@
 from smoothsource import smoothsource
 from model.model import Model
 from model.modelloader import ModelLoader
-from model.modelcompiler import ModelCompiler
+from model.javamodelcompiler import JavaModelCompiler
 import getopt
 import sys
 
@@ -11,7 +11,7 @@ def translate(modelpath, genpath):
     modelloader.load()
     classtemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassTemplate)
     selectortemplate = smoothsource.createTemplate(smoothsource.template.Java.xtUMLClassSelectorTemplate)
-    modelcompiler = ModelCompiler(model, classtemplate, selectortemplate, genpath)
+    modelcompiler = JavaModelCompiler(model, genpath, classtemplate, selectortemplate)
     modelcompiler.compileAll(persist=True)
     return True
 

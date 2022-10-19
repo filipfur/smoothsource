@@ -1,0 +1,1 @@
+{"name":"Car","attributes":[{"name": "color", "type": "Integer"}, {"name": "numberOfDoors", "type": "Integer"}, {"name": "licenseNumber", "type": "String"}]}

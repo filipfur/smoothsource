@@ -1,0 +1,1 @@
+{"id":1, "left":{"phrase":"","className":"Car","cardinality":"*"},"right":{"phrase":"is registered by","className":"Retailer","cardinality":"1"}}

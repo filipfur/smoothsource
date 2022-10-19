@@ -1,27 +1,25 @@
 from model.modelcompiler import ModelCompiler
 from model.cardinality import Cardinality
 
-class JavaModelCompiler(ModelCompiler):
+class CppModelCompiler(ModelCompiler):
 
-    def __init__(self, model, genpath, removeOld, classtemplate, selectortemplate):
+    def __init__(self, model, genpath, removeOld, classhtemplate, classcpptemplate):
         ModelCompiler.__init__(self, model, genpath, removeOld)
-        self.classtemplate = classtemplate
-        self.selectortemplate = selectortemplate
+        self.classhtemplate = classhtemplate
+        self.classcpptemplate = classcpptemplate
         self.classpath = genpath + "/classes"
-        self.selectorpath = genpath + "/selectors"
         self.createdir(self.classpath)
-        self.createdir(self.selectorpath)
 
     def compileAll(self, persist=True):
         for _class in self.model.classes().values():
             tparams = self.templatePayload(_class, self.model.superClassOf(_class))
 
-            fpath = self.classpath + "/_" + _class.name() + ".java"
-            text = self.classtemplate.generate(tparams)
+            fpath = self.classpath + "/_" + _class.name().lower() + ".h"
+            text = self.classhtemplate.generate(tparams)
             self.create(fpath, text, persist)
 
-            fpath = self.selectorpath + "/" + _class.name() + "Selector.java"
-            text = self.selectortemplate.generate(tparams)
+            fpath = self.classpath + "/_" + _class.name().lower() + ".cpp"
+            text = self.classcpptemplate.generate(tparams)
             self.create(fpath, text, persist)
         
     def templatePayload(self, _class, superClass):

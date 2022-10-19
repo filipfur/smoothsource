@@ -10,6 +10,11 @@ class Java:
     xtUMLClassTemplate = os.path.join(JavaDir, "Class.smoothsource")
     xtUMLClassSelectorTemplate = os.path.join(JavaDir, "ClassSelector.smoothsource")
 
+class Cpp:
+    CppDir = os.path.join(TemplateDir, "cpp")
+    xtUMLClassHTemplate = os.path.join(CppDir, "class.h")
+    xtUMLClassCppTemplate = os.path.join(CppDir, "class.cpp")
+
 class Template:
 
     def __init__(self, templatepath):

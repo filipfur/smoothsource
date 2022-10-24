@@ -2,7 +2,7 @@ class Model:
 
     def __init__(self):
         self._classes = {}
-        self._relations = {}
+        self._relations = []
         self._generalizations = {}
         self._associationLinks = {}
 
@@ -15,7 +15,7 @@ class Model:
     def addRelation(self, relation):
         lClass = relation.leftAssociation()._class().relate(relation)
         rClass = relation.rightAssociation()._class().relate(relation)
-        self._relations[relation.id()] = relation
+        self._relations.append(relation)
 
     def addGeneralization(self, generalization):
         self._generalizations[generalization.id()] = generalization
@@ -24,6 +24,7 @@ class Model:
         self._associationLinks[assoclink.id()] = assoclink
 
     def relationById(self, id):
+        assert(False) # depreceated
         return self._relations[id]
 
     def classes(self):

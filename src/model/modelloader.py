@@ -25,7 +25,7 @@ class ModelLoader:
     def loadClass(self, fname):
         with open(self.classpath + fname) as f:
             obj = json.load(f)
-            self.model.addClass(Class(obj["name"], obj["attributes"]))
+            self.model.addClass(Class(obj["name"], obj["attributes"], obj["operations"]))
 
     def createAssociation(self, obj):
         return Association(self.model.classByName(obj["className"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
@@ -35,7 +35,7 @@ class ModelLoader:
             obj = json.load(f)
             lhs = self.createAssociation(obj["left"])
             rhs = self.createAssociation(obj["right"])
-            self.model.addRelation(Relation(obj["id"], lhs, rhs))
+            self.model.addRelation(Relation(lhs, rhs))
 
     def loadGeneralization(self, fname):
         with open(self.generalizationpath + fname) as f:

@@ -11,6 +11,8 @@ namespace {{packageName}}
 
         virtual ~{{className}}() noexcept;
 
+        [[operations|{{operationType}} {{operationName}}({{operationParameters}});]]
+
         [[attributes|void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
         {
             _{{attributeName}} = {{attributeName}};

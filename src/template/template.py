@@ -12,8 +12,8 @@ class Java:
 
 class Cpp:
     CppDir = os.path.join(TemplateDir, "cpp")
-    xtUMLClassHTemplate = os.path.join(CppDir, "class.h")
-    xtUMLClassCppTemplate = os.path.join(CppDir, "class.cpp")
+    xtUMLClassHTemplate = os.path.join(CppDir, "class.h.smoothsource")
+    xtUMLClassCppTemplate = os.path.join(CppDir, "class.cpp.smoothsource")
 
 class Template:
 

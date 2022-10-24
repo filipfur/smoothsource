@@ -1,12 +1,8 @@
 class Relation:
 
-    def __init__(self, _id, leftAssocation, rightAssociation):
-        self._id = _id
+    def __init__(self, leftAssocation, rightAssociation):
         self._leftAssociation = leftAssocation
         self._rightAssociation = rightAssociation
-
-    def id(self):
-        return self._id
 
     # Returns the other side of the relation.
     def otherAssociation(self, _class):

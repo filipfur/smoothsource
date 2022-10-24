@@ -26,10 +26,11 @@ class CppModelCompiler(ModelCompiler):
         attributes = []
         singleRelations = []
         multiRelations = []
+        operations = []
         for relation in _class.relations():
             otherAssoc = relation.otherAssociation(_class)
             card = otherAssoc.cardinality()
-            o = {"relationId": relation.id(), "relatedClassName": otherAssoc._class().name()}
+            o = {"relatedClassName": otherAssoc._class().name()}
             if card == Cardinality.Zero_To_One or card == Cardinality.One:
                 singleRelations.append(o)
             else:
@@ -37,6 +38,18 @@ class CppModelCompiler(ModelCompiler):
         classAttribs = _class.attributes()
         for attrib in classAttribs:
             attributes.append({"attributeName": attrib["name"], "attributeType": attrib["type"]})
+
+        for operation in _class.operations():
+            parameters = ""
+            delim = ""
+            for param in operation["parameters"]: # This could be done in a file.
+                parameters += delim + param["type"] + " " + param["name"]
+                delim = ", "
+
+            operations.append({"operationName": operation["name"],
+                "operationType": operation["type"],
+                "operationParameters": parameters,
+                "operationImplementation": "{{IMPL_ajhdADASDhjkasd}}"})
 
         superClasses = []
         if superClass is not None:
@@ -48,6 +61,7 @@ class CppModelCompiler(ModelCompiler):
             "userClassPath": "user",
             "className": _class.name(),
             "attributes": attributes,
+            "operations": operations,
             "singleRelations": singleRelations,
             "multiRelations": multiRelations,
             "superClass": ("" if superClass is None else superClass.name())

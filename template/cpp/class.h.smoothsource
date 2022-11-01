@@ -1,7 +1,5 @@
 #pragma once
 
-#include "primitives.h"
-
 namespace {{packageName}}
 {
     class {{className}}
@@ -11,19 +9,19 @@ namespace {{packageName}}
 
         virtual ~{{className}}() noexcept;
 
-        [[operations|{{operationType}} {{operationName}}({{operationParameters}});]]
+        [[operations|{{type}} {{name}}({{parameters}});]]
 
-        [[attributes|void set{{attributeName:upperCC}}({{attributeType}} {{attributeName}})
+        [[attributes|void set{{name:upperCC}}({{type}} {{name}})
         {
-            _{{attributeName}} = {{attributeName}};
+            _{{name}} = {{name}};
         }]]
 
-        [[attributes|{{attributeType}} {{attributeName}}() const
+        [[attributes|{{type}} {{name}}() const
         {
-            return _{{attributeName}};
+            return _{{name}};
         }]]
 
     private:
-        [[attributes|{{attributeType}} _{{attributeName}};]]
+        [[attributes|{{type}} _{{name}};]]
     };
 }

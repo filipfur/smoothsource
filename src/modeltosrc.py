@@ -22,7 +22,8 @@ def translatecpp(modelpath, genpath):
     modelloader.load()
     classhtemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLClassHTemplate)
     classcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLClassCppTemplate)
-    modelcompiler = CppModelCompiler(model, genpath, True, classhtemplate, classcpptemplate)
+    operationcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLOperationCppTemplate)
+    modelcompiler = CppModelCompiler(model, genpath, True, classhtemplate, classcpptemplate, operationcpptemplate)
     modelcompiler.compileAll(persist=True)
     return True
 

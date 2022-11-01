@@ -19,6 +19,7 @@ class ModelLoader:
         self.classpath = modelpath + "/classes/"
         self.relationpath = modelpath + "/relations/"
         self.definitionpath = modelpath + "/definitions/"
+        self.pragmapath = modelpath + "/pragmas/"
         self.generalizationpath = modelpath + "/generalizations/"
         self.assoclinkpath = modelpath + "/association_links/"
 
@@ -39,7 +40,10 @@ class ModelLoader:
                 definition = ""
                 with open(self.definitionpath + hash + ".def", 'r') as f:
                     definition = f.read()
-                operations.append(Class.Operation(operation["name"], operation["type"], parameters, hash, definition))
+                pragma = ""
+                with open(self.pragmapath + hash + ".def", 'r') as f:
+                    pragma = f.read()
+                operations.append(Class.Operation(operation["name"], operation["type"], parameters, hash, definition, pragma))
             
             self.model.addClass(Class(obj["name"], attributes, operations))
 

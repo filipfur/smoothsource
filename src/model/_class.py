@@ -18,17 +18,20 @@ class Class:
             Class.Property.__init__(self, name, _type)
 
     class Operation(Property):
-        def __init__(self, name, _type, parameters, hash, definition):
+        def __init__(self, name, _type, parameters, hash, definition, pragma):
             Class.Property.__init__(self, name, _type)
             self._parameters = parameters
             self._hash = hash
             self._definition = definition
+            self._pragma = pragma
         def hash(self):
             return self._hash
         def parameters(self):
             return self._parameters
         def definition(self):
             return self._definition
+        def pragma(self):
+            return self._pragma
 
     def __init__(self, name, attributes, operations):
         self._name = name

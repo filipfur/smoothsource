@@ -14,6 +14,7 @@ class Cpp:
     CppDir = os.path.join(TemplateDir, "cpp")
     xtUMLClassHTemplate = os.path.join(CppDir, "class.h.smoothsource")
     xtUMLClassCppTemplate = os.path.join(CppDir, "class.cpp.smoothsource")
+    xtUMLOperationCppTemplate = os.path.join(CppDir, "definition.cpp.smoothsource")
 
 class Template:
 

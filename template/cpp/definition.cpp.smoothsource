@@ -4,19 +4,9 @@
 {{pragma}}
 /* _END_PRAGMA_ {{hash}} */
 
-{{packageName}}::{{className}}::{{className}}()
-{
-
-}
-
-{{packageName}}::{{className}}::~{{className}}()
-{
-
-}
-
-[[operations|{{type}} {{packageName}}::{{name}}({{parameters}})
+{{type}} {{packageName}}::{{name}}({{parameters}})
 {
 /* _BEGIN_DEFINITION_ {{hash}} */
 {{definition}}
 /* _END_DEFINITION_ {{hash}} */
-}]]
+}

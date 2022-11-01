@@ -1,5 +1,35 @@
 class Class:
 
+    class Property:
+        def __init__(self, name, _type):
+            self._name = name
+            self._type = _type
+        def name(self):
+            return self._name
+        def type(self):
+            return self._type
+
+    class Attribute(Property):
+        def __init__(self, name, _type):
+            Class.Property.__init__(self, name, _type)
+
+    class Parameter(Property):
+        def __init__(self, name, _type):
+            Class.Property.__init__(self, name, _type)
+
+    class Operation(Property):
+        def __init__(self, name, _type, parameters, hash, definition):
+            Class.Property.__init__(self, name, _type)
+            self._parameters = parameters
+            self._hash = hash
+            self._definition = definition
+        def hash(self):
+            return self._hash
+        def parameters(self):
+            return self._parameters
+        def definition(self):
+            return self._definition
+
     def __init__(self, name, attributes, operations):
         self._name = name
         self._attributes = attributes

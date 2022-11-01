@@ -12,5 +12,5 @@
 
 [[operations|{{operationType}} {{packageName}}::{{operationName}}({{operationParameters}})
 {
-    {{operationImplementation}}
+{{operationImplementation}}
 }]]

@@ -18,6 +18,7 @@ class ModelLoader:
         self.model = model
         self.classpath = modelpath + "/classes/"
         self.relationpath = modelpath + "/relations/"
+        self.definitionpath = modelpath + "/definitions/"
         self.generalizationpath = modelpath + "/generalizations/"
         self.assoclinkpath = modelpath + "/association_links/"
 
@@ -25,7 +26,22 @@ class ModelLoader:
     def loadClass(self, fname):
         with open(self.classpath + fname) as f:
             obj = json.load(f)
-            self.model.addClass(Class(obj["name"], obj["attributes"], obj["operations"]))
+            attributes = []
+            operations = []
+
+            for attribute in obj["attributes"]:
+                attributes.append(Class.Attribute(attribute["name"], attribute["type"]))
+            for operation in obj["operations"]:
+                parameters = []
+                for parameter in operation["parameters"]:
+                    parameters.append(Class.Parameter(parameter["name"], parameter["type"]))
+                hash = operation["hash"]
+                definition = ""
+                with open(self.definitionpath + hash + ".def", 'r') as f:
+                    definition = f.read()
+                operations.append(Class.Operation(operation["name"], operation["type"], parameters, hash, definition))
+            
+            self.model.addClass(Class(obj["name"], attributes, operations))
 
     def createAssociation(self, obj):
         return Association(self.model.classByName(obj["className"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])

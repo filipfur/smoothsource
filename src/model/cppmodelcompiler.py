@@ -37,19 +37,16 @@ class CppModelCompiler(ModelCompiler):
                 multiRelations.append(o)
         classAttribs = _class.attributes()
         for attrib in classAttribs:
-            attributes.append({"attributeName": attrib["name"], "attributeType": attrib["type"]})
+            attributes.append({"attributeName": attrib.name(), "attributeType": attrib.type()})
 
         for operation in _class.operations():
-            parameters = ""
-            delim = ""
-            for param in operation["parameters"]: # This could be done in a file.
-                parameters += delim + param["type"] + " " + param["name"]
-                delim = ", "
+            parameters = ", ".join([f"{x.type()} {x.name()}"
+                for x in operation.parameters()])
 
-            operations.append({"operationName": operation["name"],
-                "operationType": operation["type"],
+            operations.append({"operationName": operation.name(),
+                "operationType": operation.type(),
                 "operationParameters": parameters,
-                "operationImplementation": "{{IMPL_ajhdADASDhjkasd}}"})
+                "operationImplementation": operation.definition()})
 
         superClasses = []
         if superClass is not None:

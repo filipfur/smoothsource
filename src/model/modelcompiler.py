@@ -2,16 +2,14 @@ import os
 import shutil
 
 class ModelCompiler:
-    def __init__(self, model, genpath, removeOld):
+    def __init__(self, model, genpath):
         self.model = model
         self.genpath = genpath
-        if removeOld:
-            self.clearGenPath()
         self.createdir(genpath)
 
-    def clearGenPath(self):
-        if os.path.isdir(self.genpath):
-            shutil.rmtree(self.genpath)
+    def rmdir(self, dirpath):
+        if os.path.isdir(dirpath):
+            shutil.rmtree(dirpath)
 
     def create(self, fpath, text, persist):
         print("ModelCompiler::Create: " + fpath)

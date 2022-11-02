@@ -30,9 +30,7 @@ class ModelLoader:
             attributes = []
             operations = []
 
-            pragma = ""
-            with open(self.pragmapath + hash + ".def", 'r') as f:
-                pragma = f.read()
+
 
             for attribute in obj["attributes"]:
                 attributes.append(Class.Attribute(attribute["name"], attribute["type"]))
@@ -47,7 +45,11 @@ class ModelLoader:
                 
                 operations.append(Class.Operation(operation["name"], operation["type"], parameters, hash, definition))
             
-            self.model.addClass(Class(obj["name"], attributes, operations, obj["hash"], pragma))
+            hash = obj["hash"]
+            pragma = ""
+            with open(self.pragmapath + hash + ".def", 'r') as f:
+                pragma = f.read()
+            self.model.addClass(Class(obj["name"], attributes, operations, hash, pragma))
 
     def createAssociation(self, obj):
         return Association(self.model.classByName(obj["className"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])

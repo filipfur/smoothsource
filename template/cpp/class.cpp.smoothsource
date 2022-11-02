@@ -1,8 +1,8 @@
-#include "_{{className:lower}}.h"
+#include "{{className:lower}}.h"
 
-/* _BEGIN_PRAGMA_ {{hash}} */
+/* __PRAGMA_BEGIN__ {{hash}} */
 {{pragma}}
-/* _END_PRAGMA_ {{hash}} */
+/* __PRAGMA_END__ {{hash}} */
 
 {{packageName}}::{{className}}::{{className}}()
 {
@@ -14,9 +14,9 @@
 
 }
 
-[[operations|{{type}} {{packageName}}::{{name}}({{parameters}})
+[[operations|{{type}} {{packageName}}::{{className}}::{{name}}({{parameters}})
 {
-/* _BEGIN_DEFINITION_ {{hash}} */
+/* __DEFINITION_BEGIN__ {{hash}} */
 {{definition}}
-/* _END_DEFINITION_ {{hash}} */
+/* __DEFINITION_END__ {{hash}} */
 }]]

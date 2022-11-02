@@ -4,7 +4,7 @@ from model.cardinality import Cardinality
 class JavaModelCompiler(ModelCompiler):
 
     def __init__(self, model, genpath, removeOld, classtemplate, selectortemplate):
-        ModelCompiler.__init__(self, model, genpath, removeOld)
+        ModelCompiler.__init__(self, model, genpath)
         self.classtemplate = classtemplate
         self.selectortemplate = selectortemplate
         self.classpath = genpath + "/classes"

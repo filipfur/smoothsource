@@ -16,14 +16,15 @@ def translatejava(modelpath, genpath):
     modelcompiler.compileAll(persist=True)
     return True
 
-def translatecpp(modelpath, genpath):
+def translatecpp(modelpath, genpath, packageName):
     model = Model()
     modelloader = ModelLoader(model, modelpath)
     modelloader.load()
+    assert(packageName and len(packageName) > 0)
     classhtemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLClassHTemplate)
     classcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLClassCppTemplate)
     operationcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLOperationCppTemplate)
-    modelcompiler = CppModelCompiler(model, genpath, True, classhtemplate, classcpptemplate, operationcpptemplate)
+    modelcompiler = CppModelCompiler(model, genpath, True, packageName, classhtemplate, classcpptemplate, operationcpptemplate)
     modelcompiler.compileAll(persist=True)
     return True
 
@@ -42,7 +43,7 @@ def main():
     print("modelpath=%s" % modelpath)
     print("genpath=%s" % genpath)
 
-    translatecpp(modelpath, genpath)
+    translatecpp(modelpath, genpath, "gen")
 
 
 if __name__ == "__main__":

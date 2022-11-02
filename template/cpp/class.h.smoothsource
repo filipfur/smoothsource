@@ -1,5 +1,7 @@
 #pragma once
 
+<?dependencies|{{dependencies}}?>
+
 namespace {{packageName}}
 {
     class {{className}}

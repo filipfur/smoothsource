@@ -43,7 +43,7 @@ class CppModelCompiler(ModelCompiler):
             "parameters": ", ".join([f"{x.type()} {x.name()}" for x in operation.parameters()]),
             "hash": operation.hash(),
             "definition": operation.definition(),
-            "pragma": operation.pragma()
+            "pragma": _class.pragma()
         }
         return payload
 
@@ -79,8 +79,8 @@ class CppModelCompiler(ModelCompiler):
         payload = {
             "packageName": "gen",
             "className": _class.name(),
-            "hash": "ABC",
-            "pragma": "// Enter pragma here",
+            "hash": _class.hash(),
+            "pragma": _class.pragma()
             "attributes": attributes,
             "operations": operations,
             "singleRelations": singleRelations,

@@ -3,6 +3,7 @@ from model.model import Model
 from model.modelloader import ModelLoader
 from model.javamodelcompiler import JavaModelCompiler
 from model.cppmodelcompiler import CppModelCompiler
+from model.tsmodelcompiler import TypescriptModelCompiler
 import getopt
 import sys
 
@@ -25,6 +26,17 @@ def translatecpp(modelpath, genpath, packageName):
     classcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLClassCppTemplate)
     operationcpptemplate = smoothsource.createTemplate(smoothsource.template.Cpp.xtUMLOperationCppTemplate)
     modelcompiler = CppModelCompiler(model, genpath, True, packageName, classhtemplate, classcpptemplate, operationcpptemplate)
+    modelcompiler.compileAll(persist=True)
+    return True
+
+def translatets(modelpath, genpath, packageName):
+    model = Model()
+    modelloader = ModelLoader(model, modelpath)
+    modelloader.load()
+    assert(packageName and len(packageName) > 0)
+    classtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassTsxTemplate)
+    classdtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassDTsxTemplate)
+    modelcompiler = TypescriptModelCompiler(model, genpath, True, packageName, classtemplate, classdtemplate)
     modelcompiler.compileAll(persist=True)
     return True
 

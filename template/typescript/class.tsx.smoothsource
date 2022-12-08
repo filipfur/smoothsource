@@ -1,0 +1,20 @@
+{{dependencies}}
+
+/* __PRAGMA_BEGIN__ {{hash}} */
+{{pragma}}
+/* __PRAGMA_END__ {{hash}} */
+
+export class {{className}}
+{
+    [[attributes|{{name}}:{{type}};]]
+
+    [[singleRelations|{{phrase:lowerCC}}:{{className}};]]
+
+    [[operations|{{name}}({{parameters}})
+    {
+        {{setters:indent}}
+        /* __DEFINITION_BEGIN__ {{hash}} */
+        {{definition:indent}}
+        /* __DEFINITION_END__ {{hash}} */
+    }]]
+}

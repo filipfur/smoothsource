@@ -80,7 +80,12 @@ class Segment(Fragment):
                 if i < paramStart:
                     self._fragments.append(Text(content[i:paramStart]))
                 paramEnd = content.find("}}", paramStart + 2)
-                self._fragments.append(Parameter(content[paramStart + 2:paramEnd]))
+                indentation = ""
+                j = paramStart - 1
+                while j >= 0 and (content[j] == " " or content[j] == "\t"):
+                    indentation = content[j] + indentation
+                    j -= 1
+                self._fragments.append(Parameter(content[paramStart + 2:paramEnd], indentation))
                 i = paramEnd + 2
 
 

@@ -3,10 +3,11 @@ import datetime
 
 class Parameter(Fragment):
 
-    def __init__(self, name):
+    def __init__(self, name, indentation):
         arr = name.split(":")
         self._name = arr[0]
         self._operands = []
+        self._indentation = indentation
         for op in arr[1:]:
             self._operands.append(self.__getattribute__("_" + op))
 
@@ -17,11 +18,23 @@ class Parameter(Fragment):
     def _upperCC(self, text):
         if(len(text) < 2):
             return text
+        lst = list(text)
+        for i in range(len(lst)):
+            if text[i] == " ": # TODO: Extend with _ ?
+                lst[i + 1] = text[i + 1].upper()
+        text = ''.join(lst)
+        text = text.replace(" ", "")
         return text[0].upper() + text[1:]
 
     def _lowerCC(self, text):
         if(len(text) < 2):
             return text
+        lst = list(text)
+        for i in range(len(lst)):
+            if text[i] == " ": # TODO: Extend with _ ?
+                lst[i + 1] = text[i + 1].upper()
+        text = ''.join(lst)
+        text = text.replace(" ", "")
         return text[0].lower() + text[1:]
 
     def _variable(self, text):
@@ -35,6 +48,9 @@ class Parameter(Fragment):
 
     def _upper(self, text):
         return text.upper()
+
+    def _indent(self, text):
+        return text.replace("\n", "\n" + self._indentation)
 
     def transform(self, text):
         for op in self._operands:

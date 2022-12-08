@@ -1,0 +1,5 @@
+declare class {{className}}
+{
+    [[operations|{{name}}({{parameters}});]]
+    [[attributes|{{name}}:{{type}};]]
+};

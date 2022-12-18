@@ -4,17 +4,25 @@ class Relation:
         self._leftAssociation = leftAssocation
         self._rightAssociation = rightAssociation
 
+    def ourAssociation(self, _class):
+        assoc = None
+        if self._leftAssociation._class() is _class:
+            assoc = self._leftAssociation
+        elif self._rightAssociation._class() is _class:
+            assoc = self._rightAssociation
+        else:
+            raise Exception("_class is not associated with relation")
+        return assoc
+
     # Returns the other side of the relation.
     def otherAssociation(self, _class):
         assoc = None
-
         if self._leftAssociation._class() is _class:
             assoc = self._rightAssociation
         elif self._rightAssociation._class() is _class:
             assoc = self._leftAssociation
         else:
             raise Exception("_class is not associated with relation")
-
         return assoc
 
     def leftAssociation(self):

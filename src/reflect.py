@@ -42,7 +42,7 @@ def updateFiles(directory, sourceModified, data, persist=False):
             if data[d][0][i] != " ":
                 indentation = i
                 break
-        print(f"indentation={indentation}")
+        #print(f"indentation={indentation}")
         if sourceModified > lastModified:
             content = "\n".join([x[indentation:] for x in data[d]])
             if persist:
@@ -52,24 +52,33 @@ def updateFiles(directory, sourceModified, data, persist=False):
                 print(content)
             print("File updated: " + pth)
 
+def reflectFile(dataDir, genFile):
+    if not os.path.exists(genFile):
+        return False
+    pragmasDir = os.path.join(dataDir, 'pragmas')
+    definitionsDir = os.path.join(dataDir, 'definitions')
+    lastModified = os.path.getmtime(genFile) # seconds since e.g. 1970
+    source = ""
+    with open(genFile, 'r') as f:
+        source = f.read()
+    pragmas = parseKeyword(source, 'PRAGMA')
+    definitions = parseKeyword(source, 'DEFINITION')
+    updateFiles(pragmasDir, lastModified, pragmas, True)
+    updateFiles(definitionsDir, lastModified, definitions, True)
+    return True
+
 def reflectSource(dataDir, genDir):
     # genDir = 'gen'
     # dataDir = 'data'
     if not os.path.exists(genDir):
         return False
-    pragmasDir = os.path.join(dataDir, 'pragmas')
-    definitionsDir = os.path.join(dataDir, 'definitions')
 
+    rval = True
     for file in os.listdir(genDir): # Only when change is detected.
-        if not file.endswith(".cpp") and not file.endswith(".tsx"):
+        if not file.endswith(".cpp") and not file.endswith(".tsx") and not file.endswith(".ts"):
             continue
         filePath = os.path.join(genDir, file)
-        lastModified = os.path.getmtime(filePath) # seconds since e.g. 1970
-        source = ""
-        with open(filePath, 'r') as f:
-            source = f.read()
-        pragmas = parseKeyword(source, 'PRAGMA')
-        definitions = parseKeyword(source, 'DEFINITION')
-        updateFiles(pragmasDir, lastModified, pragmas, True)
-        updateFiles(definitionsDir, lastModified, definitions, True)
-    return True
+        if not reflectFile(dataDir, filePath):
+            rval = False
+            break
+    return rval

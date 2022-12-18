@@ -42,24 +42,30 @@ class TypescriptModelCompiler(ModelCompiler):
 
             lowclassname = _class.name().lower()
 
-            fpath = os.path.join(self.packagepath, lowclassname + ".tsx")
+            fpath = os.path.join(self.packagepath, lowclassname + ".ts")
             text = self.classtemplate.generate(tparams)
             self.create(fpath, text, persist)
 
-            fpath = os.path.join(self.packagepath, lowclassname + ".d.tsx")
+            fpath = os.path.join(self.packagepath, lowclassname + ".d.ts")
             text = self.classdtemplate.generate(tparams)
             self.create(fpath, text, persist)
 
     def templatePayload(self, _class, superClass):
         singleRelations = []
         multiRelations = []
+        constructors = []
         operations = []
         dependencies = Dependencies()
         for relation in _class.relations():
             otherAssoc = relation.otherAssociation(_class)
-            card = otherAssoc.cardinality()
-            dependencies.add(f"import \"./{otherAssoc._class().name().lower()}\"")
-            o = {"className": otherAssoc._class().name(), "phrase": otherAssoc.phrase()}
+            assoc = relation.ourAssociation(_class)
+            if assoc.phrase() == "":
+                continue
+            card = assoc.cardinality()
+            otherClassName = otherAssoc._class().name()
+            dependencies.add(f"import {'{ ' + otherClassName + ' }'} from \"./{otherClassName.lower()}\"")
+            o = {"className": otherClassName, "phrase": assoc.phrase(), "conditional": (card == Cardinality.Zero_To_One or card == Cardinality.Zero_To_Many)}
+            print(o)
             if card == Cardinality.Zero_To_One or card == Cardinality.One:
                 singleRelations.append(o)
             else:
@@ -77,12 +83,17 @@ class TypescriptModelCompiler(ModelCompiler):
                 for attribute in _class.attributes():
                     if parameter.name() == attribute.name():
                         setters.append(f"this.{attribute.name()} = {parameter.name()}")
-            operations.append({"name": operation.name(),
+
+            o = {"name": operation.name(),
                 "type": tsType(operation.type(), dependencies),
                 "parameters": parameters,
                 "setters": "\n".join(setters),
                 "definition": operation.definition(),
-                "hash": operation.hash()})
+                "hash": operation.hash()}
+            if operation.name() == "constructor":
+                constructors.append(o)
+            else:
+                operations.append(o)
 
         superClasses = []
         if superClass is not None:
@@ -94,6 +105,7 @@ class TypescriptModelCompiler(ModelCompiler):
             "hash": _class.hash(),
             "pragma": _class.pragma(),
             "attributes": attributes,
+            "constructors": constructors,
             "operations": operations,
             "dependencies": "\n".join(dependencies.dependencies()),
             "singleRelations": singleRelations,

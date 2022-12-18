@@ -1,5 +1,6 @@
 declare class {{className}}
 {
-    [[operations|{{name}}({{parameters}});]]
+    [[constructors|{{name}}({{parameters}});]]
+    [[operations|{{name}}({{parameters}}):{{type}};]]
     [[attributes|{{name}}:{{type}};]]
 };

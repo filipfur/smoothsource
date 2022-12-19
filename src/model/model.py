@@ -10,7 +10,7 @@ class Model:
         self._classes[_class.name()] = _class
 
     def classByName(self, name):
-        return self._classes[name]
+        return self._classes[name] if name in self._classes else None
 
     def addRelation(self, relation):
         lClass = relation.leftAssociation()._class().relate(relation)

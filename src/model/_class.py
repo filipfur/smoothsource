@@ -63,3 +63,6 @@ class Class:
 
     def hash(self):
         return self._hash
+    
+    def isExternal(self):
+        return False

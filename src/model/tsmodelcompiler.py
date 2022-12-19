@@ -63,7 +63,12 @@ class TypescriptModelCompiler(ModelCompiler):
                 continue
             card = assoc.cardinality()
             otherClassName = otherAssoc._class().name()
-            dependencies.add(f"import {'{ ' + otherClassName + ' }'} from \"./{otherClassName.lower()}\"")
+            pathToClassFile = None
+            if otherAssoc._class().isExternal():
+                pathToClassFile = f"../{otherAssoc._class().package()}/{otherClassName.lower()}"
+            else:
+                pathToClassFile = f"./{otherClassName.lower()}"
+            dependencies.add(f"import {'{ ' + otherClassName + ' }'} from \"{pathToClassFile}\"")
             o = {"className": otherClassName, "phrase": assoc.phrase(), "conditional": (card == Cardinality.Zero_To_One or card == Cardinality.Zero_To_Many)}
             print(o)
             if card == Cardinality.Zero_To_One or card == Cardinality.One:

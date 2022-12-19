@@ -3,6 +3,7 @@ import json
 
 from model.model import Model
 from model._class import Class
+from model.classref import ClassRef
 from model.relation import Relation
 from model.association import Association
 from model.cardinality import Cardinality
@@ -30,8 +31,6 @@ class ModelLoader:
             attributes = []
             operations = []
 
-
-
             for attribute in obj["attributes"]:
                 attributes.append(Class.Attribute(attribute["name"], attribute["type"]))
             for operation in obj["operations"]:
@@ -52,6 +51,8 @@ class ModelLoader:
             self.model.addClass(Class(obj["name"], attributes, operations, hash, pragma))
 
     def createAssociation(self, obj):
+        if "package" in obj:
+            return Association(ClassRef(obj["className"], obj["package"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
         return Association(self.model.classByName(obj["className"]), ModelLoader.strToCardinality[obj["cardinality"]], obj["phrase"])
 
     def loadRelation(self, fname):

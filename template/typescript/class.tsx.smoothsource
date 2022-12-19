@@ -10,6 +10,8 @@ export class {{className}}
 
     [[singleRelations|{{phrase:lowerCC}}:{{className}}<?conditional||null?>;]]
 
+    [[multiRelations|{{phrase:lowerCC}}:Array<{{className}}>;]]
+
     [[constructors|{{name}}({{parameters}}){
         {{setters:indent}}
         /* __DEFINITION_BEGIN__ {{hash}} */

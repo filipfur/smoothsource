@@ -7,4 +7,4 @@ declare class {{className}}
     [[attributes|{{name}}:{{type}};]]
     [[singleRelations|{{phrase:lowerCC}}:{{className}}<?conditional||null?>;]]
     [[multiRelations|{{phrase:lowerCC}}:Array<{{className}}>;]]
-};
+}

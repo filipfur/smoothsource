@@ -18,8 +18,9 @@ class Cpp:
 
 class Typescript:
     TsDir = os.path.join(TemplateDir, "typescript")
-    xtUMLClassTsxTemplate = os.path.join(TsDir, "class.tsx.smoothsource")
-    xtUMLClassDTsxTemplate = os.path.join(TsDir, "class.d.tsx.smoothsource")
+    xtUMLClassTsTemplate = os.path.join(TsDir, "class.ts.smoothsource")
+    xtUMLClassDTsTemplate = os.path.join(TsDir, "class.d.ts.smoothsource")
+    xtUMLInterfaceTsTemplate = os.path.join(TsDir, "interface.ts.smoothsource")
 class Template:
 
     def __init__(self, templatepath):

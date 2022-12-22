@@ -18,13 +18,14 @@ tsTypeDependencies = {
 
 class TypescriptModelCompiler(ModelCompiler):
 
-    def __init__(self, model, genpath, removeOld, packageName, classtemplate, classdtemplate):
+    def __init__(self, model, genpath, removeOld, packageName, classtemplate, classdtemplate, interfacetemplate):
         ModelCompiler.__init__(self, model, genpath)
         self.packagepath = os.path.join(genpath, packageName)
         if removeOld:
             self.rmdir(self.packagepath)
         self.classtemplate = classtemplate
         self.classdtemplate = classdtemplate
+        self.interfacetemplate = interfacetemplate
         self.packageName = packageName
         self.createdir(self.packagepath)
 
@@ -46,19 +47,33 @@ class TypescriptModelCompiler(ModelCompiler):
         return type
 
 
+    def classHasCtor(self, _class):
+        hasCtor = False
+        for operation in _class.operations():
+            if operation.name() == "constructor":
+                hasCtor = True
+                break
+        return hasCtor
+
     def compileAll(self, persist=True):
         for _class in self.model.classes().values():
             tparams = self.templatePayload(_class, self.model.superClassOf(_class))
 
             lowclassname = _class.name().lower()
+            
+            if self.classHasCtor(_class):
+                fpath = os.path.join(self.packagepath, lowclassname + ".ts")
+                text = self.classtemplate.generate(tparams)
+                self.create(fpath, text, persist)
 
-            fpath = os.path.join(self.packagepath, lowclassname + ".ts")
-            text = self.classtemplate.generate(tparams)
-            self.create(fpath, text, persist)
+                fpath = os.path.join(self.packagepath, lowclassname + ".d.ts")
+                text = self.classdtemplate.generate(tparams)
+                self.create(fpath, text, persist)
+            else:
+                fpath = os.path.join(self.packagepath, lowclassname + ".ts")
+                text = self.interfacetemplate.generate(tparams)
+                self.create(fpath, text, persist)
 
-            fpath = os.path.join(self.packagepath, lowclassname + ".d.ts")
-            text = self.classdtemplate.generate(tparams)
-            self.create(fpath, text, persist)
 
     def classDependency(self, _class):
         otherClassName = _class.name()
@@ -130,6 +145,7 @@ class TypescriptModelCompiler(ModelCompiler):
                 operations.append(o)
 
         subclasses = []
+        interfaces = []
         for inherit in _class.inherits():
             cl = None
             name = inherit.name()
@@ -139,7 +155,10 @@ class TypescriptModelCompiler(ModelCompiler):
                 cl = self.classByPackageAndName(inherit.classPackage(), inherit.name())
                 dep = self.classDependency(cl)
                 self.dependencies.add(dep)
-            subclasses.append(name)
+            if cl is not None and self.classHasCtor(cl):
+                subclasses.append(name)
+            else:
+                interfaces.append(name)
 
         payload = {
             "packageName": self.packageName,
@@ -153,5 +172,6 @@ class TypescriptModelCompiler(ModelCompiler):
             "singleRelations": singleRelations,
             "multiRelations": multiRelations,
             "subclasses": ", ".join(subclasses),
+            "interfaces": ", ".join(interfaces)
         }
         return payload

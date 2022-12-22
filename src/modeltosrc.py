@@ -36,9 +36,10 @@ def translatets(modelpath, genpath, packageName):
         modelloader = ModelLoader(model, modelpath)
         modelloader.load()
         assert(packageName and len(packageName) > 0)
-        classtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassTsxTemplate)
-        classdtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassDTsxTemplate)
-        modelcompiler = TypescriptModelCompiler(model, genpath, True, packageName, classtemplate, classdtemplate)
+        classtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassTsTemplate)
+        classdtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassDTsTemplate)
+        interfacetemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLInterfaceTsTemplate)
+        modelcompiler = TypescriptModelCompiler(model, genpath, True, packageName, classtemplate, classdtemplate, interfacetemplate)
         modelcompiler.compileAll(persist=True)
         return True
     except Exception:

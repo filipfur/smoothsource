@@ -1,0 +1,7 @@
+{{dependencies}}
+
+export interface {{className}}
+{
+    [[operations|{{name}}({{parameters}}):{{type}};]]
+    [[attributes|{{name}}:{{type}};]]
+};

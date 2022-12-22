@@ -6,6 +6,7 @@ from model.cppmodelcompiler import CppModelCompiler
 from model.tsmodelcompiler import TypescriptModelCompiler
 import getopt
 import sys
+import traceback
 
 def translatejava(modelpath, genpath):
     model = Model()
@@ -30,15 +31,19 @@ def translatecpp(modelpath, genpath, packageName):
     return True
 
 def translatets(modelpath, genpath, packageName):
-    model = Model()
-    modelloader = ModelLoader(model, modelpath)
-    modelloader.load()
-    assert(packageName and len(packageName) > 0)
-    classtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassTsxTemplate)
-    classdtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassDTsxTemplate)
-    modelcompiler = TypescriptModelCompiler(model, genpath, True, packageName, classtemplate, classdtemplate)
-    modelcompiler.compileAll(persist=True)
-    return True
+    try:
+        model = Model()
+        modelloader = ModelLoader(model, modelpath)
+        modelloader.load()
+        assert(packageName and len(packageName) > 0)
+        classtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassTsxTemplate)
+        classdtemplate = smoothsource.createTemplate(smoothsource.template.Typescript.xtUMLClassDTsxTemplate)
+        modelcompiler = TypescriptModelCompiler(model, genpath, True, packageName, classtemplate, classdtemplate)
+        modelcompiler.compileAll(persist=True)
+        return True
+    except Exception:
+        print(traceback.format_exc())
+    return False
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], "vm:o:", ["version", "model-path=", "output-dir="])

@@ -4,15 +4,14 @@
 {{pragma}}
 /* __PRAGMA_END__ {{hash}} */
 
-export class {{className}}
+export class {{className}}<?subclasses| extends {{subclasses}}?>
 {
     [[attributes|{{name}}:{{type}};]]
-
     [[singleRelations|{{phrase:lowerCC}}:{{className}}<?conditional||null?>;]]
-
     [[multiRelations|{{phrase:lowerCC}}:Array<{{className}}>;]]
 
     [[constructors|{{name}}({{parameters}}){
+        {{superInvoke}}
         {{setters:indent}}
         /* __DEFINITION_BEGIN__ {{hash}} */
         {{definition:indent}}

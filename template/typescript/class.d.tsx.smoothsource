@@ -1,6 +1,10 @@
+{{dependencies}}
+
 declare class {{className}}
 {
     [[constructors|{{name}}({{parameters}});]]
     [[operations|{{name}}({{parameters}}):{{type}};]]
     [[attributes|{{name}}:{{type}};]]
+    [[singleRelations|{{phrase:lowerCC}}:{{className}}<?conditional||null?>;]]
+    [[multiRelations|{{phrase:lowerCC}}:Array<{{className}}>;]]
 };

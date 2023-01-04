@@ -9,6 +9,7 @@ export class {{className}}<?subclasses| extends {{subclasses}}?><?interfaces| im
     [[attributes|{{name}}:{{type}};]]
     [[singleRelations|{{phrase:lowerCC}}:{{className}}<?conditional||null?>;]]
     [[multiRelations|{{phrase:lowerCC}}:Array<{{className}}>;]]
+    [[mappedRelations|{{phrase:lowerCC}}:Map<{{mapType}},{{className}}>;]]
 
     [[constructors|{{name}}({{parameters}}) {
         {{superInvoke}}

@@ -32,7 +32,8 @@ class ModelLoader:
             for inherit in obj["inherits"]:
                 inherits.append(Class.Inheritance(inherit["name"]["name"], inherit["name"]["package"], inherit["type"]["name"], inherit["type"]["package"]))
             for attribute in obj["attributes"]:
-                attributes.append(Class.Attribute(attribute["name"], attribute["type"]["name"], attribute["type"]["package"]))
+                attributes.append(Class.Attribute(attribute["name"], attribute["type"]["name"], attribute["type"]["package"],
+                    attribute["identifier"] if "identifier" in attribute else False))
             for operation in obj["operations"]:
                 parameters = []
                 for parameter in operation["parameters"]:

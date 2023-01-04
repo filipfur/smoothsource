@@ -92,25 +92,40 @@ class TypescriptModelCompiler(ModelCompiler):
             cl = self.model.exClassByKey(package, name)
         return cl
 
+    def addRelation(self, singleRelations, multiRelations, mappedRelations, otherClass, phrase, card):
+        if phrase == "":
+            return False
+        otherClassName = otherClass.name();
+        o = {"className": otherClassName, "phrase": phrase, "conditional": (card == Cardinality.Zero_To_One or card == Cardinality.Zero_To_Many)}
+        if card == Cardinality.Zero_To_One or card == Cardinality.One:
+            singleRelations.append(o)
+        else:
+            mapType = None
+            for attrib in otherClass.attributes():
+                if attrib.isIdentifier():
+                    mapType = attrib.type()
+                    break
+            if mapType:
+                o["mapType"] = mapType
+                mappedRelations.append(o)
+            else:
+                multiRelations.append(o)
+        return True
+
     def templatePayload(self, _class, superClass):
         singleRelations = []
         multiRelations = []
+        mappedRelations = []
         constructors = []
         operations = []
-        self.dependencies = Dependencies()
+        self.dependencies = Dependencies(self.classDependency(_class))
         for relation in _class.relations():
             otherAssoc = relation.otherAssociation(_class)
             assoc = relation.ourAssociation(_class)
-            if assoc.phrase() == "":
-                continue
-            card = assoc.cardinality()
-            otherClassName = otherAssoc._class().name()
-            self.dependencies.add(self.classDependency(otherAssoc._class()))
-            o = {"className": otherClassName, "phrase": assoc.phrase(), "conditional": (card == Cardinality.Zero_To_One or card == Cardinality.Zero_To_Many)}
-            if card == Cardinality.Zero_To_One or card == Cardinality.One:
-                singleRelations.append(o)
-            else:
-                multiRelations.append(o)
+            if self.addRelation(singleRelations, multiRelations, mappedRelations, otherAssoc._class(), assoc.phrase(), assoc.cardinality()):
+                self.dependencies.add(self.classDependency(otherAssoc._class()))
+            if otherAssoc._class().name() == _class.name():
+                self.addRelation(singleRelations, multiRelations, mappedRelations, _class, otherAssoc.phrase(), otherAssoc.cardinality())
 
         attributes = [{"name": attrib.name(), "type": self.tsType(attrib.type(), attrib.package())} for attrib in _class.attributes()]
 
@@ -171,6 +186,7 @@ class TypescriptModelCompiler(ModelCompiler):
             "dependencies": "\n".join(self.dependencies.dependencies()),
             "singleRelations": singleRelations,
             "multiRelations": multiRelations,
+            "mappedRelations": mappedRelations,
             "subclasses": ", ".join(subclasses),
             "interfaces": ", ".join(interfaces)
         }

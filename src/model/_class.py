@@ -13,8 +13,12 @@ class Class:
             return self._package
 
     class Attribute(Property):
-        def __init__(self, name, _type, _package):
+        def __init__(self, name, _type, _package, identifier):
             Class.Property.__init__(self, name, _type, _package)
+            self._identifier = identifier
+
+        def isIdentifier(self):
+            return self._identifier
 
     class Parameter(Property):
         def __init__(self, name, _type, _package):
